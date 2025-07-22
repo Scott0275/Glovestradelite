@@ -2848,65 +2848,53 @@
         integrity="sha512-U6K1YLIFUWcvuw5ucmMtT9HH4t0uz3M366qrF5y4vnyH6dgDzndlcGvH/Lz5k8NFh80SN95aJ5rqGZEdaQZ7ZQ=="
         crossorigin="anonymous"
         referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.js"></script>
     <script src="assets/js/popper.js"></script>
+    <script src="../assets/js/firebase-config.js"></script>
 
     <script>
-        document.addEventListener("DOMContentLoaded", handleURLMessage);
-
-        // Handle message from URL and display it using SweetAlert
-        function handleURLMessage() {
+        document.addEventListener("DOMContentLoaded", () => {
+            // Check for a referral ID in the URL and store it
             const urlParams = new URLSearchParams(window.location.search);
-            const message = urlParams.get('message');
-            const messageType = urlParams.get('message_type');
-
-            if (message) {
-                const iconType = messageType === "success" ? "success" : "error"; // Define icon based on type
-
-                swal.fire({
-                    title: iconType === "success" ? "Success!" : "Error!",
-                    text: decodeURIComponent(message),
-                    icon: iconType,
-                    confirmButtonText: "OK"
-                });
-
-                // Remove message from URL after displaying
-                history.replaceState(null, '', window.location.pathname);
+            const refId = urlParams.get('ref');
+            if (refId) {
+                document.getElementById('referred_by').value = refId;
             }
-        }
+        });
 
-        document.getElementById("signupForm")?.addEventListener("submit", async function(event) {
+        document.getElementById("signupForm").addEventListener("submit", function(event) {
             event.preventDefault(); // Prevent traditional form submission
 
             // Get form values
-            const fullname = document.getElementById("fullname")?.value.trim();
-            const username = document.getElementById("username")?.value.trim();
-            const home_address = document.getElementById("home_address")?.value.trim();
-            const city = document.getElementById("city")?.value.trim();
-            const postal_code = document.getElementById("postal_code")?.value.trim();
-            const country = document.getElementById("country")?.value.trim();
-            const currency = document.getElementById("currency")?.value.trim() || "USD";
-            const phone = document.getElementById("phone")?.value.trim();
-            const email = document.getElementById("email")?.value.trim();
-            const password = document.getElementById("password")?.value.trim();
-            const password_confirmation = document.getElementById("confirm_password")?.value.trim();
+            const fullname = document.getElementById("fullname").value.trim();
+            const username = document.getElementById("username").value.trim();
+            const home_address = document.getElementById("home_address").value.trim();
+            const city = document.getElementById("city").value.trim();
+            const postal_code = document.getElementById("postal_code").value.trim();
+            const country = document.getElementById("country").value.trim();
+            const phone = document.getElementById("phone").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const confirm_password = document.getElementById("confirm_password").value.trim();
             const checkbox = document.querySelector(".uk-checkbox");
+            const referredBy = document.getElementById('referred_by').value;
+            const btn = document.getElementById("btnSignup");
 
             // Check for empty fields
-            if (!fullname || !username || !phone || !email || !password) {
+            if (!fullname || !username || !phone || !email || !password || !country) {
                 Swal.fire({
                     title: "Error",
-                    text: "All required fields (Full Name, Username, Phone, Email, Password) must be filled!",
+                    text: "Please fill in all required fields.",
                     icon: "error",
                     confirmButtonText: "OK"
                 });
                 return;
             }
 
-            if (password !== password_confirmation) {
+            if (password !== confirm_password) {
                 Swal.fire({
                     title: "Error",
-                    text: "Passwords dont match",
+                    text: "Passwords do not match.",
                     icon: "error",
                     confirmButtonText: "OK"
                 });
@@ -2914,7 +2902,7 @@
             }
 
             // Check if checkbox is checked
-            if (!checkbox?.checked) {
+            if (!checkbox.checked) {
                 Swal.fire({
                     title: "Error",
                     text: "You must agree to the terms and conditions!",
@@ -2924,8 +2912,44 @@
                 return;
             }
 
-            // Submit the form if all required fields are filled
-            document.getElementById('signupForm')?.submit();
+            btn.disabled = true;
+            btn.innerHTML = 'Signing Up...';
+
+            // Create user with Firebase Auth
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    // Update user's display name in Auth
+                    return user.updateProfile({
+                        displayName: fullname
+                    }).then(() => {
+                        // Create user document in Firestore
+                        return db.collection('users').doc(user.uid).set({
+                            uid: user.uid,
+                            fullname: fullname,
+                            username: username,
+                            email: email,
+                            phone: phone,
+                            country: country,
+                            home_address: home_address,
+                            city: city,
+                            postal_code: postal_code,
+                            earnings: 0,
+                            referred_by: referredBy || null, // Store referrer ID if it exists
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        });
+                    });
+                })
+                .then(() => {
+                    window.location.href = '../dashboard.php'; // Redirect to dashboard on success
+                })
+                .catch((error) => {
+                    Swal.fire("Registration Failed", error.message, "error");
+                })
+                .finally(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = 'Sign Up';
+                });
         });
     </script>
 </body>

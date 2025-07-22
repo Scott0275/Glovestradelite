@@ -33,7 +33,7 @@ if (count($errors) > 0) {
 }
 
 // 4. Build the email
-$to      = 'support@glovetradelites.org';        // your support email
+$to      = 'oscarscott2411@gmail.com';        // Admin's primary email
 $subject = "New contact from $name";
 $body    = "
   <h2>New Message from Contact Form</h2>
@@ -48,7 +48,7 @@ $body    = "
 $headers  = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
 // From visitor address (some servers require a from on your own domain)
-$headers .= "From: {$name} <no-reply@glovetradelites.org>\r\n";
+$headers .= "From: {$name} <no-reply@glovetradelitex.org>\r\n";
 $headers .= "Reply-To: {$email}\r\n";
 
 // 6. Send the email
