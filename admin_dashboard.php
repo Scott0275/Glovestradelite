@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Admin Dashboard</title>
+    <title>Admin Dashboard - Glove TradeLite</title>
+    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.svg">
     <link rel="stylesheet" href="assets/css/dashboard.css">
     <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
 </head>
@@ -9,9 +10,17 @@
     <div class="main-wrapper">
         <div class="sidebar">
             <div class="sidebar-header">
-                <img src="assets/img/logo/logo.svg" alt="Logo" class="logo">
+                <a href="index.html"><img src="assets/img/logo/logo.svg" alt="Logo" class="logo"></a>
                 <h3 id="user-welcome">Admin Panel</h3>
             </div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="tab-link active" onclick="openTab(event, 'users')"><i class="fas fa-users"></i> Users</a></li>
+                <li><a href="#" class="tab-link" onclick="openTab(event, 'kyc')"><i class="fas fa-id-card"></i> KYC Requests</a></li>
+                <li><a href="#" class="tab-link" onclick="openTab(event, 'withdrawals')"><i class="fas fa-wallet"></i> Withdrawals</a></li>
+                <li><a href="#" class="tab-link" onclick="openTab(event, 'notifications')"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="#" class="tab-link" onclick="openTab(event, 'plans')"><i class="fas fa-chart-line"></i> Investment Plans</a></li>
+                <li><a href="#" class="tab-link" onclick="openTab(event, 'wallets')"><i class="fab fa-bitcoin"></i> Wallets</a></li>
+            </ul>
             <div class="sidebar-footer" style="margin-top: auto;">
                 <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
             </div>
@@ -21,61 +30,184 @@
                 <h1>Admin Dashboard</h1>
             </div>
 
-            <div class="admin-tabs">
-                <button class="tab-link active" onclick="openTab(event, 'users')">Users</button>
-                <button class="tab-link" onclick="openTab(event, 'kyc')">KYC Requests</button>
-                <button class="tab-link" onclick="openTab(event, 'withdrawals')">Withdrawal Requests</button>
-            </div>
-
             <!-- Users Tab -->
             <div id="users" class="tab-content active">
                 <h2>User Management</h2>
-                <table class="admin-table" id="users-table">
-                    <thead>
-                        <tr>
-                            <th>Full Name</th>
-                            <th>Email</th>
-                            <th>Earnings (USD)</th>
-                            <th>Referred By</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- User data will be inserted here --></tbody>
-                </table>
+                <div class="card">
+                    <table class="admin-table" id="users-table">
+                        <thead>
+                            <tr>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Earnings (USD)</th>
+                                <th>Referred By</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- User data will be inserted here --></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- KYC Tab -->
             <div id="kyc" class="tab-content">
                 <h2>Pending KYC Submissions</h2>
-                <table class="admin-table" id="kyc-table">
-                    <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Submitted At</th>
-                            <th>Documents</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- KYC requests will be inserted here --></tbody>
-                </table>
+                <div class="card">
+                    <table class="admin-table" id="kyc-table">
+                        <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Submitted At</th>
+                                <th>Documents</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- KYC requests will be inserted here --></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Withdrawals Tab -->
             <div id="withdrawals" class="tab-content">
                 <h2>Pending Withdrawal Requests</h2>
-                <table class="admin-table" id="withdrawals-table">
-                     <thead>
-                        <tr>
-                            <th>Email</th>
-                            <th>Amount (USD)</th>
-                            <th>Method</th>
-                            <th>Details</th>
-                            <th>Requested At</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody><!-- Withdrawal requests will be inserted here --></tbody>
-                </table>
+                <div class="card">
+                    <table class="admin-table" id="withdrawals-table">
+                         <thead>
+                            <tr>
+                                <th>Email</th>
+                                <th>Amount (USD)</th>
+                                <th>Method</th>
+                                <th>Details</th>
+                                <th>Requested At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Withdrawal requests will be inserted here --></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div id="notifications" class="tab-content">
+                <h2>Send Notification to All Users</h2>
+                <div class="card">
+                    <form id="notificationForm">
+                        <div class="form-group">
+                            <label for="notificationMessage">Message</label>
+                            <textarea id="notificationMessage" class="form-control" rows="4" placeholder="Enter your notification message here..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn">Send Notification</button>
+                    </form>
+                </div>
+
+                <h2 style="margin-top: 30px;">Sent Notifications</h2>
+                <div class="card">
+                    <table class="admin-table" id="notifications-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 70%;">Message</th>
+                                <th>Sent At</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Sent notifications will be inserted here --></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Investment Plans Tab -->
+            <div id="plans" class="tab-content">
+                <h2>Manage Investment Plans</h2>
+                <div class="card">
+                    <h3 id="plan-form-title">Add/Edit Plan</h3>
+                    <form id="planForm">
+                        <input type="hidden" id="planId">
+                        <div class="form-group">
+                            <label for="planName">Plan Name</label>
+                            <input type="text" id="planName" class="form-control" required>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label for="minDeposit">Min Deposit (USD)</label>
+                                <input type="number" id="minDeposit" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="maxDeposit">Max Deposit (USD)</label>
+                                <input type="number" id="maxDeposit" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="roiPercentage">ROI (%)</label>
+                                <input type="number" id="roiPercentage" class="form-control" step="0.1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="durationDays">Duration (Days)</label>
+                                <input type="number" id="durationDays" class="form-control" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn">Save Plan</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearPlanForm()">New Plan</button>
+                    </form>
+                </div>
+
+                <h2 style="margin-top: 30px;">Existing Plans</h2>
+                <div class="card">
+                    <table class="admin-table" id="plans-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Min Deposit</th>
+                                <th>Max Deposit</th>
+                                <th>ROI (%)</th>
+                                <th>Duration (Days)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Plans will be inserted here --></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Wallets Tab -->
+            <div id="wallets" class="tab-content">
+                <h2>Manage Deposit Wallets</h2>
+                <div class="card">
+                    <h3 id="wallet-form-title">Add/Edit Wallet</h3>
+                    <form id="walletForm">
+                        <input type="hidden" id="walletId">
+                        <div class="form-group">
+                            <label for="walletName">Wallet Name (e.g., Bitcoin)</label>
+                            <input type="text" id="walletName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="walletSymbol">Symbol (e.g., BTC)</label>
+                            <input type="text" id="walletSymbol" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="walletAddress">Wallet Address</label>
+                            <input type="text" id="walletAddress" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="walletIconUrl">Icon URL</label>
+                            <input type="url" id="walletIconUrl" class="form-control" placeholder="https://..." required>
+                        </div>
+                        <button type="submit" class="btn">Save Wallet</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearWalletForm()">New Wallet</button>
+                    </form>
+                </div>
+
+                <h2 style="margin-top: 30px;">Existing Wallets</h2>
+                <div class="card">
+                    <table class="admin-table" id="wallets-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Symbol</th>
+                                <th>Address</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody><!-- Wallets will be inserted here --></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -98,9 +230,9 @@
             for (i = 0; i < tabcontent.length; i++) {
                 tabcontent[i].style.display = "none";
             }
-            tablinks = document.getElementsByClassName("tab-link");
+            tablinks = document.querySelectorAll(".sidebar-nav .tab-link");
             for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
+                tablinks[i].classList.remove("active");
             }
             document.getElementById(tabName).style.display = "block";
             evt.currentTarget.className += " active";
@@ -126,6 +258,9 @@
             fetchAllUsers();
             fetchKycRequests();
             fetchWithdrawalRequests();
+            fetchSentNotifications();
+            fetchInvestmentPlans();
+            fetchWallets();
         }
 
         // --- User Management ---
@@ -249,77 +384,260 @@
                 .catch(err => Swal.fire('Error', err.message, 'error'));
         }
 
-        async function rejectKyc(uid) {
-            const { value: reason } = await Swal.fire({
-                title: 'Enter rejection reason',
-                input: 'text',
-                inputLabel: 'Reason',
-                inputPlaceholder: 'e.g., Blurry ID photo',
-                showCancelButton: true
+        // --- Notification Management ---
+        function fetchSentNotifications() {
+            const notificationsTable = document.getElementById('notifications-table').getElementsByTagName('tbody')[0];
+            db.collection('notifications').orderBy('sentAt', 'desc').onSnapshot(snapshot => {
+                let notificationsHtml = '';
+                snapshot.forEach(doc => {
+                    const notification = doc.data();
+                    const sentAt = notification.sentAt ? notification.sentAt.toDate().toLocaleString() : 'N/A';
+                    notificationsHtml += `
+                        <tr>
+                            <td>${notification.message}</td>
+                            <td>${sentAt}</td>
+                        </tr>
+                    `;
+                });
+                notificationsTable.innerHTML = notificationsHtml || '<tr><td colspan="2">No notifications sent yet.</td></tr>';
             });
-
-            if (reason) {
-                db.collection('users').doc(uid).update({ kycStatus: 'rejected', kycRejectReason: reason })
-                    .then(() => Swal.fire('Rejected', 'KYC has been rejected.', 'success'))
-                    .catch(err => Swal.fire('Error', err.message, 'error'));
-            }
         }
 
-        // --- Withdrawal Management ---
-        function fetchWithdrawalRequests() {
-            const wTable = document.getElementById('withdrawals-table').getElementsByTagName('tbody')[0];
-            db.collection('withdrawal_requests').where('status', '==', 'pending').onSnapshot(snapshot => {
-                let wHtml = '';
+        document.getElementById('notificationForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const messageInput = document.getElementById('notificationMessage');
+            const message = messageInput.value.trim();
+
+            if (!message) {
+                Swal.fire('Error', 'Notification message cannot be empty.', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "This will send a notification to all users.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, send it!',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.collection('notifications').add({
+                        message: message,
+                        sentAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        Swal.fire('Sent!', 'The notification has been sent to all users.', 'success');
+                        messageInput.value = '';
+                    }).catch(err => Swal.fire('Error', 'Failed to send notification: ' + err.message, 'error'));
+                }
+            });
+        });
+
+        // --- Investment Plan Management ---
+        function fetchInvestmentPlans() {
+            const plansTable = document.getElementById('plans-table').getElementsByTagName('tbody')[0];
+            db.collection('investment_plans').orderBy('min_deposit', 'asc').onSnapshot(snapshot => {
+                let plansHtml = '';
                 snapshot.forEach(doc => {
-                    const req = doc.data();
-                    const requestedAt = req.requestedAt ? req.requestedAt.toDate().toLocaleString() : 'N/A';
-                    wHtml += `
+                    const plan = doc.data();
+                    plansHtml += `
                         <tr>
-                            <td>${req.email}</td>
-                            <td>$${req.amount.toFixed(2)}</td>
-                            <td>${req.method}</td>
-                            <td>${req.details}</td>
-                            <td>${requestedAt}</td>
+                            <td>${plan.name}</td>
+                            <td>$${plan.min_deposit.toLocaleString()}</td>
+                            <td>$${plan.max_deposit.toLocaleString()}</td>
+                            <td>${plan.roi_percentage}%</td>
+                            <td>${plan.duration_days}</td>
                             <td>
-                                <button class="btn btn-success" onclick="approveWithdrawal('${doc.id}', '${req.userId}', ${req.amount})">Approve</button>
-                                <button class="btn btn-danger" onclick="rejectWithdrawal('${doc.id}')">Reject</button>
+                                <button class="btn" onclick="editPlan('${doc.id}')">Edit</button>
+                                <button class="btn btn-danger" onclick="deletePlan('${doc.id}')">Delete</button>
                             </td>
                         </tr>
                     `;
                 });
-                wTable.innerHTML = wHtml || '<tr><td colspan="6">No pending withdrawal requests.</td></tr>';
+                plansTable.innerHTML = plansHtml || '<tr><td colspan="6" style="text-align:center;">No investment plans found.</td></tr>';
             });
         }
 
-        function approveWithdrawal(reqId, userId, amount) {
-            const userRef = db.collection('users').doc(userId);
-            const withdrawalRef = db.collection('withdrawal_requests').doc(reqId);
+        async function editPlan(id) {
+            try {
+                const docRef = db.collection('investment_plans').doc(id);
+                const doc = await docRef.get();
+                if (!doc.exists) {
+                    return Swal.fire('Error', 'Plan not found.', 'error');
+                }
+                const plan = doc.data();
+                document.getElementById('planId').value = id;
+                document.getElementById('planName').value = plan.name;
+                document.getElementById('minDeposit').value = plan.min_deposit;
+                document.getElementById('maxDeposit').value = plan.max_deposit;
+                document.getElementById('roiPercentage').value = plan.roi_percentage;
+                document.getElementById('durationDays').value = plan.duration_days;
+            document.getElementById('plan-form-title').textContent = 'Edit Plan';
+                document.getElementById('planName').focus();
+            } catch (err) {
+                Swal.fire('Error', 'Failed to fetch plan details: ' + err.message, 'error');
+            }
+        }
 
-            db.runTransaction(transaction => {
-                return transaction.get(userRef).then(userDoc => {
-                    if (!userDoc.exists) {
-                        throw "User not found!";
-                    }
-                    const newEarnings = (userDoc.data().earnings || 0) - amount;
-                    if (newEarnings < 0) {
-                        throw "User has insufficient funds!";
-                    }
-                    transaction.update(userRef, { earnings: newEarnings });
-                    transaction.update(withdrawalRef, { status: 'approved' });
+        function clearPlanForm() {
+            document.getElementById('planForm').reset();
+            document.getElementById('planId').value = '';
+            document.getElementById('plan-form-title').textContent = 'Add New Plan';
+        }
+
+        function deletePlan(id) {
+            Swal.fire({
+                title: 'Are you sure?', text: "This will delete the investment plan.", icon: 'warning',
+                showCancelButton: true, confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.collection('investment_plans').doc(id).delete()
+                        .then(() => Swal.fire('Deleted!', 'Plan has been deleted.', 'success'))
+                        .catch(err => Swal.fire('Error', 'Failed to delete plan: ' + err.message, 'error'));
+                }
+            });
+        }
+
+        // --- Wallet Management ---
+        function fetchWallets() {
+            const walletsTable = document.getElementById('wallets-table').getElementsByTagName('tbody')[0];
+            db.collection('wallets').orderBy('name').onSnapshot(snapshot => {
+                let walletsHtml = '';
+                snapshot.forEach(doc => {
+                    const wallet = doc.data();
+                    walletsHtml += `
+                        <tr>
+                            <td>${wallet.name}</td>
+                            <td>${wallet.symbol}</td>
+                            <td>${wallet.address}</td>
+                            <td>
+                                <button class="btn" onclick="editWallet('${doc.id}')">Edit</button>
+                                <button class="btn btn-danger" onclick="deleteWallet('${doc.id}')">Delete</button>
+                            </td>
+                        </tr>
+                    `;
                 });
-            }).then(() => {
-                Swal.fire('Approved!', 'Withdrawal approved and earnings updated.', 'success');
-            }).catch(err => {
-                Swal.fire('Transaction Failed', err.toString(), 'error');
+                walletsTable.innerHTML = walletsHtml || '<tr><td colspan="4" style="text-align:center;">No wallets found.</td></tr>';
             });
         }
 
-        function rejectWithdrawal(reqId) {
-            db.collection('withdrawal_requests').doc(reqId).update({ status: 'rejected' })
-                .then(() => Swal.fire('Rejected', 'Withdrawal request has been rejected.', 'success'))
-                .catch(err => Swal.fire('Error', err.message, 'error'));
+        async function editWallet(id) {
+            try {
+                const doc = await db.collection('wallets').doc(id).get();
+                if (!doc.exists) return Swal.fire('Error', 'Wallet not found.', 'error');
+                const wallet = doc.data();
+                document.getElementById('walletId').value = id;
+                document.getElementById('walletName').value = wallet.name;
+                document.getElementById('walletSymbol').value = wallet.symbol;
+                document.getElementById('walletAddress').value = wallet.address;
+                document.getElementById('walletIconUrl').value = wallet.icon_url;
+                document.getElementById('wallet-form-title').textContent = 'Edit Wallet';
+                document.getElementById('walletName').focus();
+            } catch (err) {
+                Swal.fire('Error', 'Failed to fetch wallet details: ' + err.message, 'error');
+            }
         }
 
+        function clearWalletForm() {
+            document.getElementById('walletForm').reset();
+            document.getElementById('walletId').value = '';
+            document.getElementById('wallet-form-title').textContent = 'Add New Wallet';
+        }
+
+        function deleteWallet(id) {
+            Swal.fire({
+                title: 'Are you sure?', text: "This will delete the wallet.", icon: 'warning',
+                showCancelButton: true, confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    db.collection('wallets').doc(id).delete()
+                        .then(() => Swal.fire('Deleted!', 'Wallet has been deleted.', 'success'))
+                        .catch(err => Swal.fire('Error', 'Failed to delete wallet: ' + err.message, 'error'));
+                }
+            });
+        }
+
+
+        // --- Event Listeners (attached once) ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Notification Form
+            document.getElementById('notificationForm').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const messageInput = document.getElementById('notificationMessage');
+                const message = messageInput.value.trim();
+                if (!message) return Swal.fire('Error', 'Notification message cannot be empty.', 'error');
+
+                Swal.fire({
+                    title: 'Are you sure?', text: "This will send a notification to all users.", icon: 'warning',
+                    showCancelButton: true, confirmButtonText: 'Yes, send it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        db.collection('notifications').add({
+                            message: message,
+                            sentAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            Swal.fire('Sent!', 'The notification has been sent.', 'success');
+                            messageInput.value = '';
+                        }).catch(err => Swal.fire('Error', 'Failed to send notification: ' + err.message, 'error'));
+                    }
+                });
+            });
+
+            // Investment Plan Form
+            document.getElementById('planForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const planId = document.getElementById('planId').value;
+                const plan = {
+                    name: document.getElementById('planName').value,
+                    min_deposit: parseFloat(document.getElementById('minDeposit').value),
+                    max_deposit: parseFloat(document.getElementById('maxDeposit').value),
+                    roi_percentage: parseFloat(document.getElementById('roiPercentage').value),
+                    duration_days: parseInt(document.getElementById('durationDays').value)
+                };
+
+                if (isNaN(plan.min_deposit) || isNaN(plan.max_deposit) || isNaN(plan.roi_percentage) || isNaN(plan.duration_days)) {
+                    return Swal.fire('Error', 'Please enter valid numbers for plan details.', 'error');
+                }
+
+                try {
+                    if (planId) {
+                        await db.collection('investment_plans').doc(planId).update(plan);
+                        Swal.fire('Success', 'Plan updated successfully.', 'success');
+                    } else {
+                        await db.collection('investment_plans').add(plan);
+                        Swal.fire('Success', 'New plan added successfully.', 'success');
+                    }
+                    clearPlanForm();
+                } catch (err) {
+                    Swal.fire('Error', 'Failed to save plan: ' + err.message, 'error');
+                }
+            });
+
+            // Wallet Form
+            document.getElementById('walletForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const walletId = document.getElementById('walletId').value;
+                const wallet = {
+                    name: document.getElementById('walletName').value,
+                    symbol: document.getElementById('walletSymbol').value,
+                    address: document.getElementById('walletAddress').value,
+                    icon_url: document.getElementById('walletIconUrl').value
+                };
+
+                try {
+                    if (walletId) {
+                        await db.collection('wallets').doc(walletId).update(wallet);
+                        Swal.fire('Success', 'Wallet updated successfully.', 'success');
+                    } else {
+                        await db.collection('wallets').add(wallet);
+                        Swal.fire('Success', 'New wallet added successfully.', 'success');
+                    }
+                    clearWalletForm();
+                } catch (err) {
+                    Swal.fire('Error', 'Failed to save wallet: ' + err.message, 'error');
+                }
+            });
+        });
     </script>
 </body>
 </html>
